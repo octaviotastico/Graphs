@@ -133,22 +133,47 @@ void dfsGrid(state current) {
 	visit(current);
 	for(state move : moves) {
 		state next = current + move;
-		if(valid(next) && !visited(next) && !obstacle(next)) dfsGrid(next);
+		if(valid(next) && !visited(next) && !obstacle(next))
+			dfsGrid(next);
 	}
 }
 
 void dfsGridStack(state current) {
-	// Complete
+	stack<state> s;
+	s.push(current);
+	while(!s.empty()){
+		visit(s.top());
+		state v = s.top(); s.pop();
+		for(state move : moves){
+			state next = v + move;
+			if(visitable(next)){
+				s.push(next);
+				visit(next);
+			}
+		}
+	}
 }
 
 void bfsGrid(state current) {
-	queue<int
+	queue<state> q;
+	q.push(current);
+	while(!q.empty()){
+		visit(q.front());
+		state v = q.front(); q.pop();
+		for(state move : moves){
+			state next = v + move;
+			if(visitable(next)){
+				q.push(next);
+				visit(next);
+			}
+		}
+	}
 }
 
 
 
 int main() {
-	// Tree // *****************************************
+	// Tree // ***************************************
 	cin >> n;
 	fore(i, 0, n - 1) {
 		int a, b; cin >> a >> b; a--, b--;
@@ -170,7 +195,7 @@ int main() {
 	dfsGraph(0);
 	dfsGraphStack(0);
 
-	// Grid // *****************************************
+	// Grid // ***************************************
 	cin >> n >> m;
 	fore(i, 0, n) cin >> grid[i];
 
