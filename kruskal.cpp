@@ -7,23 +7,23 @@ using namespace std;
 #define ll long long
 const int N = 1000;
 vector<pair<ll,pair<ll,ll>>> g; // Graph (cost, (x, y))
-ll n, m, a, b, c, mst_weight, mst_vertex, mst_edges, father[N];
+ll n, m, a, b, c, mst_weight, mst_vertex, mst_edges, ancestors[N];
 
 void set_fathers(){
 	for(ll i = 0; i < N; i++){
-		father[i] = i;
+		ancestors[i] = i;
 	}
 }
 
 ll father(ll x){
-	if(father[x] == x) return x;
-	else return father(father[x]);
+	if(ancestors[x] == x) return x;
+	else return father(ancestors[x]);
 }
 
 void unite(ll a, ll b){
 	ll father_a = father(a);
 	ll father_b = father(b);
-	father[father_a] = father_b;
+	ancestors[father_a] = father_b;
 }
 
 void kruskal(){
@@ -33,10 +33,10 @@ void kruskal(){
 	while(mst_vertex < n - 1 or mst_edges < m){
 		a = g[mst_edges].snd.fst;
 		b = g[mst_edges].snd.snd;
-		w = g[mst_edges].fst;
+		c = g[mst_edges].fst;
 		if(father(a) != father(b)){
 			unite(a, b);
-			mst_weight += w;
+			mst_weight += c;
 			mst_vertex++;
 		}
 		mst_edges++;
@@ -50,6 +50,6 @@ int main(){
 		cin >> a >> b >> c;
 		g.pb(mp(c, mp(a,b)));
 	}
-	kruskal(0);
+	kruskal();
 	return 0;
 }
